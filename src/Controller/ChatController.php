@@ -6,6 +6,7 @@ use App\Entity\ChatRoom;
 use App\Entity\Message;
 use App\Form\MessageType;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,7 +21,8 @@ class ChatController extends AbstractController
     public function chat(
         Request $request,
         HubInterface $hub,
-        EntityManagerInterface $em
+        EntityManagerInterface $em,
+        LoggerInterface $logger,
     ): Response
     {
         $message = new Message();
@@ -30,7 +32,6 @@ class ChatController extends AbstractController
         $form = $this->createForm(MessageType::class, $message);
         $emptyForm = clone $form; // Used to display an empty form after a POST request
         $form->handleRequest($request);
-
         if ($form->isSubmitted() && $form->isValid()) {
             $message->setCreatedAt(new \DateTimeImmutable());
             $em->persist($message);
@@ -38,7 +39,7 @@ class ChatController extends AbstractController
 
             $hub->publish(new Update(
                 'chat',
-                $this->renderView('chat/message.stream.html.twig', ['message' => $message->getContent()]),
+                $this->renderView('chat/message.stream.html.twig', ['message' => $message]),
             ));
             $form = $emptyForm;
         }

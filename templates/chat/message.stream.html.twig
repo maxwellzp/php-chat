@@ -2,7 +2,9 @@
 {# New messages received through the Mercure connection are appended to the div with the "messages" ID. #}
 <turbo-stream action="append" targets="#messages">
     <template>
-        <div>{{ message }}</div>
+        <div>
+            <strong>User 1</strong>: {{ message.content }} sent at {{ message.createdAt|date("m/d/Y") }}
+        </div>
     </template>
 </turbo-stream>
 

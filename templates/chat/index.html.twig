@@ -1,21 +1,3 @@
-{#{% extends 'base.html.twig' %}#}
-
-{#{% block title %}Chat Application{% endblock %}#}
-
-
-{#{% block body %}#}
-{#    <h1>Chat</h1>#}
-
-{#    <div id="messages" {{ turbo_stream_listen('chat') }}>#}
-{#        #}{##}
-{#        The messages will be displayed here.#}
-{#        "turbo_stream_listen()" automatically registers a Stimulus controller that subscribes to the "chat" topic as managed by the transport.#}
-{#        All connected users will receive the new messages!#}
-{#        #}
-{#    </div>#}
-{#{% endblock %}#}
-
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Chat Application{% endblock %}
@@ -45,7 +27,11 @@
             <div class="col-md-8">
                 <div class="card">
                     <div class="card-header">Chat Room</div>
-                    <div class="card-body" id="chat-messages" style="height: 400px; overflow-y: auto;">
+                    <div
+                            id="messages" {{ turbo_stream_listen('chat') }}
+                            class="card-body"
+                            style="height: 400px; overflow-y: auto;"
+                    >
                         {% for message in messages %}
                             <div><strong>User 1</strong>: {{ message.content }}</div>
                         {% endfor %}
