@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\ChatRoom;
 use App\Entity\Message;
 use App\Form\MessageType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,6 +24,8 @@ class ChatController extends AbstractController
     ): Response
     {
         $message = new Message();
+        $chatrooms = $em->getRepository(Chatroom::class)->findAll();
+        $messages = $em->getRepository(Message::class)->findAll();
 
         $form = $this->createForm(MessageType::class, $message);
         $emptyForm = clone $form; // Used to display an empty form after a POST request
@@ -42,6 +45,8 @@ class ChatController extends AbstractController
 
         return $this->render('chat/index.html.twig', [
             'form' => $form,
+            'chatrooms' => $chatrooms,
+            'messages' => $messages,
         ]);
     }
 }
