@@ -10,7 +10,7 @@ use Doctrine\Migrations\AbstractMigration;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-final class Version20250329103951 extends AbstractMigration
+final class Version20250330103010 extends AbstractMigration
 {
     public function getDescription(): string
     {
@@ -21,19 +21,19 @@ final class Version20250329103951 extends AbstractMigration
     {
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
-            CREATE TABLE chat_room (id SERIAL NOT NULL, name VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
+            CREATE TABLE chat_room (id UUID NOT NULL, name VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
+        SQL);
+        $this->addSql(<<<'SQL'
+            COMMENT ON COLUMN chat_room.id IS '(DC2Type:uuid)'
         SQL);
         $this->addSql(<<<'SQL'
             COMMENT ON COLUMN chat_room.created_at IS '(DC2Type:datetime_immutable)'
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE TABLE message (id SERIAL NOT NULL, chat_room_id INT NOT NULL, content VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, "user" INT NOT NULL, PRIMARY KEY(id))
+            CREATE TABLE message (id UUID NOT NULL, content VARCHAR(255) NOT NULL, created_at TIMESTAMP(0) WITHOUT TIME ZONE NOT NULL, PRIMARY KEY(id))
         SQL);
         $this->addSql(<<<'SQL'
-            CREATE INDEX IDX_B6BD307F1819BCFA ON message (chat_room_id)
-        SQL);
-        $this->addSql(<<<'SQL'
-            CREATE INDEX IDX_B6BD307F356B3608 ON message ("user")
+            COMMENT ON COLUMN message.id IS '(DC2Type:uuid)'
         SQL);
         $this->addSql(<<<'SQL'
             COMMENT ON COLUMN message.created_at IS '(DC2Type:datetime_immutable)'
@@ -76,12 +76,6 @@ final class Version20250329103951 extends AbstractMigration
         $this->addSql(<<<'SQL'
             CREATE TRIGGER notify_trigger AFTER INSERT OR UPDATE ON messenger_messages FOR EACH ROW EXECUTE PROCEDURE notify_messenger_messages();
         SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE message ADD CONSTRAINT FK_B6BD307F1819BCFA FOREIGN KEY (chat_room_id) REFERENCES chat_room (id) NOT DEFERRABLE INITIALLY IMMEDIATE
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE message ADD CONSTRAINT FK_B6BD307F356B3608 FOREIGN KEY ("user") REFERENCES "user" ("id") NOT DEFERRABLE INITIALLY IMMEDIATE
-        SQL);
     }
 
     public function down(Schema $schema): void
@@ -89,12 +83,6 @@ final class Version20250329103951 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->addSql(<<<'SQL'
             CREATE SCHEMA public
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE message DROP CONSTRAINT FK_B6BD307F1819BCFA
-        SQL);
-        $this->addSql(<<<'SQL'
-            ALTER TABLE message DROP CONSTRAINT FK_B6BD307F356B3608
         SQL);
         $this->addSql(<<<'SQL'
             DROP TABLE chat_room

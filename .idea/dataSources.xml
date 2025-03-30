@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="chatapp@localhost" uuid="d35699ab-f555-4774-b54c-7cfc5e1e4ecd">
+    <data-source source="LOCAL" name="chatapp@localhost" uuid="aca5f16b-5282-4e33-8758-17ed98183724">
       <driver-ref>postgresql</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.postgresql.Driver</jdbc-driver>
