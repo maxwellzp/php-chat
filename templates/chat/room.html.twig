@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+
+{% block body %}
+    <div class="container">
+        <h2>{{ chatroom.name }}</h2>
+        <div id="chat-messages">
+            {% for message in chatroom.messages %}
+                <div>{{ message.content }}</div>
+            {% endfor %}
+        </div>
+
+        <form action="{{ path('send_message', {id: chatroom.id}) }}" method="post" data-turbo-frame="chat-messages">
+            <input type="text" name="content" required>
+            <button type="submit">Send</button>
+        </form>
+    </div>
+
+{#    <script>#}
+{#        const eventSource = new EventSource("{{ path('mercure', {'topic': '/chat/' ~ chatroom.id}) }}");#}
+{#        eventSource.onmessage = event => {#}
+{#            const message = JSON.parse(event.data);#}
+{#            document.getElementById("chat-messages").innerHTML += `<div>${message.content}</div>`;#}
+{#        };#}
+{#    </script>#}
+
+{% endblock %}

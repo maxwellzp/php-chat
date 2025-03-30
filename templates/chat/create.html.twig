@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Create Chat Room{% endblock %}
+
+{% block body %}
+    <div class="container mt-5">
+        <h2>Create a New Chat Room</h2>
+
+        <div class="card p-4 mt-3">
+            {{ form_start(form) }}
+            {{ form_row(form.name) }}
+            {{ form_row(form.save) }}
+            {{ form_end(form) }}
+        </div>
+
+        <a href="{{ path('chat_index') }}" class="btn btn-secondary mt-3">Back to Chat Rooms</a>
+    </div>
+{% endblock %}
