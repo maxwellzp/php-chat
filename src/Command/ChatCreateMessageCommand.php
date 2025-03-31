@@ -15,6 +15,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
+use Twig\Environment;
 
 #[AsCommand(
     name: 'chat:create-message',
@@ -26,6 +27,7 @@ class ChatCreateMessageCommand extends Command
         private HubInterface $hub,
         private EntityManagerInterface $entityManager,
         private UserRepository $userRepository,
+        private Environment $twig,
     )
     {
         parent::__construct();
@@ -55,10 +57,15 @@ class ChatCreateMessageCommand extends Command
         $this->entityManager->persist($message);
         $this->entityManager->flush();
 
+        $htmlMessage = $this->twig->render('chat/message.stream.html.twig', [
+            'message' => $message,
+        ]);
+        $io->write($htmlMessage);
+
         $io->success(sprintf('The message "%s" has been created', $message->getContent()));
 
         $this->hub->publish(new Update(
-            'chat', $messageText
+            'chat', $htmlMessage
         ));
 
         $io->success(sprintf('The message "%s" has been sent to Mercure', $messageText));
