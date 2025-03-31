@@ -3,6 +3,7 @@
 namespace App\Command;
 
 use App\Entity\Message;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -23,7 +24,8 @@ class ChatCreateMessageCommand extends Command
 {
     public function __construct(
         private HubInterface $hub,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private UserRepository $userRepository,
     )
     {
         parent::__construct();
@@ -44,7 +46,10 @@ class ChatCreateMessageCommand extends Command
         $faker = Factory::create();
         $messageText = $faker->text(50);
 
+        $user = $this->userRepository->findOneBy(['email' => 'chat-tester@gmail.com']);
+
         $message = new Message();
+        $message->setSentBy($user);
         $message->setContent($messageText);
         $message->setCreatedAt(new \DateTimeImmutable());
         $this->entityManager->persist($message);

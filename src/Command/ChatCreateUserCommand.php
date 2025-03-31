@@ -42,7 +42,7 @@ class ChatCreateUserCommand extends Command
         $faker = Factory::create();
 
         $plainPassword = '123456';
-        $email = $faker->email;
+        $email = $faker->email();
 
         $user = new User();
         $user->setPassword($plainPassword);

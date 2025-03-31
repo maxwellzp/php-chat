@@ -22,6 +22,10 @@ class Message
     #[ORM\Column]
     private ?\DateTimeImmutable $createdAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?User $sentBy = null;
+
     public function getId(): ?Uuid
     {
         return $this->id;
@@ -47,6 +51,18 @@ class Message
     public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getSentBy(): ?User
+    {
+        return $this->sentBy;
+    }
+
+    public function setSentBy(?User $sentBy): static
+    {
+        $this->sentBy = $sentBy;
 
         return $this;
     }
