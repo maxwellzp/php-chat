@@ -14,7 +14,6 @@ use Symfony\Component\Mercure\HubInterface;
 use Symfony\Component\Mercure\Update;
 use Symfony\Component\Routing\Attribute\Route;
 
-#[Route('/chat')]
 class ChatController extends AbstractController
 {
     #[Route('/', name: 'chat_index')]
