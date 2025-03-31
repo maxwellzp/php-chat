@@ -25,6 +25,7 @@ class ChatController extends AbstractController
         LoggerInterface $logger,
     ): Response
     {
+        $user = $this->getUser();
         $message = new Message();
         $chatrooms = $em->getRepository(Chatroom::class)->findAll();
         $messages = $em->getRepository(Message::class)->findAll();
