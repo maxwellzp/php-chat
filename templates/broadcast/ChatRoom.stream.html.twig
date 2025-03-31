@@ -1,0 +1,24 @@
+{% block create %}
+    <turbo-stream action="append" targets="#chatroom-list">
+        <template>
+            <li class="list-group-item">
+                <a href="#"
+                   class="chatroom-link text-decoration-none d-block">
+                    {{ entity.name }}
+                </a>
+            </li>
+        </template>
+    </turbo-stream>
+{% endblock %}
+
+{% block update %}
+    <turbo-stream action="update" targets="#chatroom-list">
+        <template>
+
+        </template>
+    </turbo-stream>
+{% endblock %}
+
+{% block remove %}
+    <turbo-stream action="remove" targets="#chatroom-list"></turbo-stream>
+{% endblock %}

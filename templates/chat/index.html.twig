@@ -8,7 +8,10 @@
             <!-- Chat Rooms List -->
             <div class="col-md-4">
                 <h4>Chat Rooms</h4>
-                <ul class="list-group" id="chatroom-list">
+                <ul
+                        class="list-group"
+                        id="chatroom-list"
+                        {{ turbo_stream_listen('App\\Entity\\ChatRoom') }}>
                     {% for chatroom in chatrooms %}
                         <li class="list-group-item">
                             <a href="#"

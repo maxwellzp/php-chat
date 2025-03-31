@@ -6,8 +6,10 @@ use App\Repository\ChatRoomRepository;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Types\UuidType;
 use Symfony\Component\Uid\Uuid;
+use Symfony\UX\Turbo\Attribute\Broadcast;
 
 #[ORM\Entity(repositoryClass: ChatRoomRepository::class)]
+#[Broadcast]
 class ChatRoom
 {
     #[ORM\Id]
