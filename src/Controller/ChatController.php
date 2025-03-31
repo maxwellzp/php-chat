@@ -24,7 +24,6 @@ class ChatController extends AbstractController
         LoggerInterface $logger,
     ): Response
     {
-        $user = $this->getUser();
         $message = new Message();
         $chatrooms = $em->getRepository(Chatroom::class)->findAll();
         $messages = $em->getRepository(Message::class)->findAll();
@@ -33,6 +32,7 @@ class ChatController extends AbstractController
         $emptyForm = clone $form; // Used to display an empty form after a POST request
         $form->handleRequest($request);
         if ($form->isSubmitted() && $form->isValid()) {
+            $message->setSentBy($this->getUser());
             $message->setCreatedAt(new \DateTimeImmutable());
             $em->persist($message);
             $em->flush();

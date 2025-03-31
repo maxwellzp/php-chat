@@ -36,7 +36,10 @@
                             style="height: 400px; overflow-y: auto;"
                     >
                         {% for message in messages %}
-                            <div><strong>User 1</strong>: {{ message.content }}</div>
+                            <div style="margin-bottom: 10px;">
+                                <div><strong>{{ message.sentBy.email }}</strong> {{ message.createdAt|date("F j, Y, g:i a") }}</div>
+                                <div>{{ message.content }}</div>
+                            </div>
                         {% endfor %}
                     </div>
                 </div>
