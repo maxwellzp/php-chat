@@ -60,7 +60,6 @@ class ChatCreateMessageCommand extends Command
         $htmlMessage = $this->twig->render('chat/message.stream.html.twig', [
             'message' => $message,
         ]);
-        $io->write($htmlMessage);
 
         $io->success(sprintf('The message "%s" has been created', $message->getContent()));
 
