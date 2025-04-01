@@ -26,6 +26,10 @@ class Message
     #[ORM\JoinColumn(nullable: false)]
     private ?User $sentBy = null;
 
+    #[ORM\ManyToOne(inversedBy: 'messages')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?ChatRoom $chatRoom = null;
+
     public function getId(): ?Uuid
     {
         return $this->id;
@@ -63,6 +67,18 @@ class Message
     public function setSentBy(?User $sentBy): static
     {
         $this->sentBy = $sentBy;
+
+        return $this;
+    }
+
+    public function getChatRoom(): ?ChatRoom
+    {
+        return $this->chatRoom;
+    }
+
+    public function setChatRoom(?ChatRoom $chatRoom): static
+    {
+        $this->chatRoom = $chatRoom;
 
         return $this;
     }

@@ -1,0 +1,25 @@
+<turbo-frame id="chat-frame">
+    <! --- History -->
+    <div class="card">
+        <div class="card-header">Chat Room: {{ chatRoom.name }}</div>
+        <div
+                id="messages" {{ turbo_stream_listen({ turboStream }) }}
+                class="card-body"
+                style="height: 400px; overflow-y: auto;"
+        >
+            {% for message in messages %}
+                {{ include('chat/_message.html.twig', { message: message }) }}
+            {% endfor %}
+        </div>
+
+        <!-- Message form -->
+        <turbo-frame id="message_form">
+            {{ form_start(form, {'action': path('send_message', {id: chatRoom.id})}) }}
+            <div class="input-group">
+                {{ form_widget(form.content) }}
+                {{ form_widget(form.send) }}
+            </div>
+            {{ form_end(form) }}
+        </turbo-frame>
+    </div>
+</turbo-frame>
