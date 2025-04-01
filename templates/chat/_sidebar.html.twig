@@ -4,14 +4,7 @@
         id="chatroom-list"
         {{ turbo_stream_listen('App\\Entity\\ChatRoom') }}>
     {% for room in chatRooms %}
-        <li class="list-group-item">
-            <a
-                    href="{{ path('chat_room', {id: room.id}) }}"
-                    data-turbo-frame="chat-frame"
-                    class="chatroom-link text-decoration-none d-block">
-                {{ room.name }}
-            </a>
-        </li>
+        {{ include('chat/_chatroom.html.twig', { room: room }) }}
     {% else %}
         <li class="list-group-item text-muted">No chat rooms available.</li>
     {% endfor %}

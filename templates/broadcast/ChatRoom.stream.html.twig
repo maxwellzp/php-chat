@@ -1,24 +1,19 @@
 {% block create %}
     <turbo-stream action="append" targets="#chatroom-list">
         <template>
-            <li class="list-group-item">
-                <a href="#"
-                   class="chatroom-link text-decoration-none d-block">
-                    {{ entity.name }}
-                </a>
-            </li>
+            {{ include('chat/_chatroom.html.twig', { room: entity }) }}
         </template>
     </turbo-stream>
 {% endblock %}
 
 {% block update %}
-    <turbo-stream action="update" targets="#chatroom-list">
+    <turbo-stream action="replace" targets="#room_{{ id }}">
         <template>
-{#            This block required, but we don't need it#}
+            {{ include('chat/_chatroom.html.twig', { room: entity }) }}
         </template>
     </turbo-stream>
 {% endblock %}
 
 {% block remove %}
-    <turbo-stream action="remove" targets="#chatroom-list"></turbo-stream>
+    <turbo-stream action="remove" targets="#room_{{ id }}"></turbo-stream>
 {% endblock %}

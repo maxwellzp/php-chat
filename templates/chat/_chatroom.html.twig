@@ -1,0 +1,12 @@
+<li
+        class="list-group-item"
+        id="room_{{ room.id }}"
+        {{ turbo_stream_listen(room) }}>
+    <a
+            href="{{ path('chat_room', {id: room.id}) }}"
+            data-turbo-frame="chat-frame"
+            class="chatroom-link text-decoration-none d-block"
+    >
+        {{ room.name }}
+    </a>
+</li>
