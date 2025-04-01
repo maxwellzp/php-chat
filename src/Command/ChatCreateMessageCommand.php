@@ -1,16 +1,19 @@
 <?php
 
+declare (strict_types = 1);
+
 namespace App\Command;
 
+use App\Entity\ChatRoom;
 use App\Entity\Message;
+use App\Entity\User;
+use App\Repository\ChatRoomRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 use Symfony\Component\Mercure\HubInterface;
@@ -27,18 +30,11 @@ class ChatCreateMessageCommand extends Command
         private HubInterface $hub,
         private EntityManagerInterface $entityManager,
         private UserRepository $userRepository,
+        private ChatRoomRepository $chatRoomRepository,
         private Environment $twig,
     )
     {
         parent::__construct();
-    }
-
-    protected function configure(): void
-    {
-        $this
-            ->addArgument('arg1', InputArgument::OPTIONAL, 'Argument description')
-            ->addOption('option1', null, InputOption::VALUE_NONE, 'Option description')
-        ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output): int
@@ -48,10 +44,19 @@ class ChatCreateMessageCommand extends Command
         $faker = Factory::create();
         $messageText = $faker->text(50);
 
+        $chatRoom = $this->chatRoomRepository->findOneBy(['name' => 'General']);
+        if (!$chatRoom instanceof ChatRoom) {
+            throw new \Exception('ChatRoom not found');
+        }
+
         $user = $this->userRepository->findOneBy(['email' => 'chat-tester@gmail.com']);
+        if (!$user instanceof User) {
+            throw new \Exception('User not found');
+        }
 
         $message = new Message();
         $message->setSentBy($user);
+        $message->setChatRoom($chatRoom);
         $message->setContent($messageText);
         $message->setCreatedAt(new \DateTimeImmutable());
         $this->entityManager->persist($message);
