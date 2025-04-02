@@ -17,6 +17,7 @@ use App\Entity\Message;
 
 class ChatController extends AbstractController
 {
+    const MAX_MESSAGES = 50;
     #[Route('/', name: 'chat_home')]
     public function index(EntityManagerInterface $em): Response
     {
@@ -33,7 +34,7 @@ class ChatController extends AbstractController
         $messages = $em->getRepository(Message::class)->findBy(
             ['chatRoom' => $chatRoom],
             ['createdAt' => 'ASC'],
-            50,
+            self::MAX_MESSAGES,
         );
 
         $message = new Message();
