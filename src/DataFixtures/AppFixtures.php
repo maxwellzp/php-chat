@@ -22,7 +22,7 @@ class AppFixtures extends Fixture
 
     public function load(ObjectManager $manager): void
     {
-        $chatRoomNames = ['General', 'Business', 'Economy'];
+        $chatRoomNames = ['General', 'Business', 'Economy', 'Company'];
 
         foreach ($chatRoomNames as $chatRoomName) {
             $chatroom = new Chatroom();
