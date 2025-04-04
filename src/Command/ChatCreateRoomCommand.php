@@ -4,7 +4,7 @@ declare (strict_types = 1);
 
 namespace App\Command;
 
-use App\Entity\ChatRoom;
+use App\Factory\ChatRoomFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -21,7 +21,8 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 class ChatCreateRoomCommand extends Command
 {
     public function __construct(
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private ChatRoomFactory $chatRoomFactory,
     )
     {
         parent::__construct();
@@ -39,12 +40,9 @@ class ChatCreateRoomCommand extends Command
         $io = new SymfonyStyle($input, $output);
         $roomName = $input->getArgument('roomName')?: "test-name";
 
-        $chatRoom = new ChatRoom();
-        $chatRoom->setName($roomName);
-        $chatRoom->setCreatedAt(new \DateTimeImmutable());
+        $chatRoom = $this->chatRoomFactory->create($roomName);
         $this->entityManager->persist($chatRoom);
         $this->entityManager->flush();
-
 
         $io->success(sprintf('The room "%s" has been created', $chatRoom->getName()));
 

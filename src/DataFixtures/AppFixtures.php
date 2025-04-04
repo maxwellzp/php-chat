@@ -3,8 +3,8 @@
 namespace App\DataFixtures;
 
 use App\Entity\ChatRoom;
-use App\Entity\Message;
-use App\Entity\User;
+use App\Factory\MessageFactory;
+use App\Factory\UserFactory;
 use App\Repository\ChatRoomRepository;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
@@ -16,6 +16,8 @@ class AppFixtures extends Fixture
     public function __construct(
         private UserPasswordHasherInterface $userPasswordHasher,
         private ChatRoomRepository $chatRoomRepository,
+        private MessageFactory $messageFactory,
+        private UserFactory $userFactory
     )
     {
     }
@@ -35,20 +37,14 @@ class AppFixtures extends Fixture
         $faker = Factory::create();
         $plainPassword = '123456';
 
-        $user = new User();
-        $user->setPassword($plainPassword);
-        $user->setEmail('chat-tester@gmail.com');
-        $user->setIsVerified(true);
+        $user = $this->userFactory->create('chat-tester@gmail.com', $plainPassword, true);
         $user->setPassword($this->userPasswordHasher->hashPassword($user, $plainPassword));
+
         $manager->persist($user);
 
         $generalGroup = $this->chatRoomRepository->findOneBy(['name' => 'General']);
         for ($i = 0; $i < 5; $i++) {
-            $message = new Message();
-            $message->setSentBy($user);
-            $message->setChatRoom($generalGroup);
-            $message->setContent($faker->text(50));
-            $message->setCreatedAt(new \DateTimeImmutable());
+            $message = $this->messageFactory->create($user, $generalGroup, $faker->text(50));
             $manager->persist($message);
         }
 

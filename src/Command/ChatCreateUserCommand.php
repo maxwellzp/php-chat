@@ -5,6 +5,7 @@ declare (strict_types = 1);
 namespace App\Command;
 
 use App\Entity\User;
+use App\Factory\UserFactory;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -25,6 +26,7 @@ class ChatCreateUserCommand extends Command
     public function __construct(
         private UserPasswordHasherInterface $userPasswordHasher,
         private EntityManagerInterface $entityManager,
+        private UserFactory $userFactory,
     )
     {
         parent::__construct();
@@ -46,12 +48,8 @@ class ChatCreateUserCommand extends Command
         $plainPassword = '123456';
         $email = $faker->email();
 
-        $user = new User();
-        $user->setPassword($plainPassword);
-        $user->setEmail($email);
-        $user->setIsVerified(true);
+        $user = $this->userFactory->create($email, $plainPassword, true);
         $user->setPassword($this->userPasswordHasher->hashPassword($user, $plainPassword));
-
         $this->entityManager->persist($user);
         $this->entityManager->flush();
 

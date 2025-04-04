@@ -5,8 +5,8 @@ declare (strict_types = 1);
 namespace App\Command;
 
 use App\Entity\ChatRoom;
-use App\Entity\Message;
 use App\Entity\User;
+use App\Factory\MessageFactory;
 use App\Repository\ChatRoomRepository;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -32,6 +32,7 @@ class ChatCreateMessageCommand extends Command
         private UserRepository $userRepository,
         private ChatRoomRepository $chatRoomRepository,
         private Environment $twig,
+        private MessageFactory $messageFactory,
     )
     {
         parent::__construct();
@@ -54,11 +55,8 @@ class ChatCreateMessageCommand extends Command
             throw new \Exception('User not found');
         }
 
-        $message = new Message();
-        $message->setSentBy($user);
-        $message->setChatRoom($chatRoom);
-        $message->setContent($messageText);
-        $message->setCreatedAt(new \DateTimeImmutable());
+        $message = $this->messageFactory->create($user, $chatRoom, $messageText);
+
         $this->entityManager->persist($message);
         $this->entityManager->flush();
 
